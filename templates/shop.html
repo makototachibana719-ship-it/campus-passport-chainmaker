@@ -1,0 +1,94 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero">
+<div class="eyebrow">CONTRIBUTE · REDEEM · PERSONALIZE</div>
+<h1>把校园贡献，兑换成自己的风格。</h1>
+<p>积分来自真实校园任务，装扮由你选择。兑换后可启用，也可以随时恢复默认外观。</p>
+</section>
+
+{% if message %}<section class="card notice">{{message}}</section>{% endif %}
+{% if error %}<section class="card badbox bad">{{error}}</section>{% endif %}
+
+<section class="card row" style="justify-content:space-between">
+<div><small>{{'校园兑换账户余额' if user=='admin' else '当前可用积分'}}</small>
+<div class="metric">{{balance if balance is not none else '暂不可用'}}</div></div>
+<div>
+<span class="tag">数字装扮 · 每种限兑换一次</span>
+<p class="muted">兑换积分转入校园兑换账户，积分总发行量不变。</p>
+</div>
+</section>
+
+{% if user!='admin' %}
+<div class="two">
+{% for sku,g in goods.items() %}
+<section class="card">
+<div class="art art-{{sku}}">
+{% if sku=='orbit' %}<span class="avatar orbit">{{user[0]|upper}}</span>
+{% else %}<span>校园极光</span>{% endif %}
+</div>
+<span class="tag">{{'头像装扮' if g.slot=='avatar' else '个人背景'}}</span>
+<h2 style="margin-top:12px">{{g.name}}</h2>
+<p class="muted">{{g.description}}</p>
+<div class="reward">{{g.price}} <small>积分</small></div>
+{% set order=own.get(sku) %}
+
+{% if order and order.status=='paid' %}
+<p class="ok">已拥有 · {{'使用中' if appearance.get(g.slot)==sku else '可启用'}}</p>
+<form action="/shop/equip" method="post">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="sku" value="{{sku}}">
+<button>启用装扮</button>
+</form>
+
+{% elif order and order.status=='pending' %}
+<p class="muted">支付状态待核对，请查看下方订单；不会自动重复扣款。</p>
+
+{% else %}
+<form action="/shop/buy" method="post"
+data-confirm="确认使用{{g.price}}积分兑换{{g.name}}？{% if balance is not none %}按当前余额计算，兑换后为{{balance-g.price}}积分。{% endif %}">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="sku" value="{{sku}}">
+<button {% if balance is none or balance<g.price %}disabled{% endif %}>
+{{'积分不足' if balance is not none and balance<g.price else '确认兑换'}}
+</button>
+</form>
+{% endif %}
+</section>
+{% endfor %}
+</div>
+
+<section class="card row" style="justify-content:space-between">
+<div><strong>我的外观设置</strong><p class="muted">恢复默认外观不会删除已兑换装扮。</p></div>
+<form action="/shop/reset" method="post">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<button class="secondary">恢复默认外观</button>
+</form>
+</section>
+{% endif %}
+
+<section class="card">
+<h2>{{'校园兑换记录' if user=='admin' else '我的兑换记录'}}</h2>
+{% for o in records %}
+<div style="padding:18px 0;border-top:1px solid #e5eaf2">
+<div class="row" style="justify-content:space-between">
+<strong>{{goods[o.sku].name}} · {{o.price}}积分</strong>
+<span class="tag">{{{'paid':'兑换完成','pending':'待核对支付','failed':'支付失败'}[o.status]}}</span>
+</div>
+<p class="muted">{{labels[o.user]}} · 订单创建时间：{{o.created}} UTC</p>
+<details><summary>查看支付凭证</summary>
+<p class="mono">订单编号：{{o.id}}<br>支付交易：{{o.tx or '尚未取得'}}</p>
+{% if o.error %}<p>{{o.error}}</p>{% endif %}
+</details>
+{% if o.status=='pending' and o.user==user %}
+<form action="/shop/reconcile" method="post">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="order" value="{{o.id}}">
+<label>回查支付交易；已有交易编号时可直接核对</label>
+<input name="tx" value="{{o.tx or ''}}" placeholder="填入本订单的真实支付交易ID">
+<button class="secondary">只核对，不再次扣款</button>
+</form>
+{% endif %}
+</div>
+{% else %}<p class="muted">还没有兑换记录。</p>{% endfor %}
+</section>
+{% endblock %}

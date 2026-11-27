@@ -1,0 +1,273 @@
+{
+  "source_archive": "参赛大作业 (2).zip",
+  "source_sha256": "c7374974fca53b5743580e12951043b534b66b64ee5ab87034b96250d1ad3203",
+  "count": 38,
+  "files": [
+    {
+      "path": "docs/screenshots/core/01_原网络与基础积分合约复查.png",
+      "sha256": "4c9ce12bbf8996089c74adb296222a312f0674a3551543ac05fa6197bfa1f1b9",
+      "bytes": 142460,
+      "width": 1657,
+      "height": 687
+    },
+    {
+      "path": "docs/screenshots/core/02a_三合约编译_SDK版本与打包校验.png",
+      "sha256": "cafd8a2ca9749d67924029e4dce00da2b68340db8829acabe2e2d4552f3d1ef4",
+      "bytes": 117899,
+      "width": 1647,
+      "height": 767
+    },
+    {
+      "path": "docs/screenshots/core/02b_三个合约包_SHA256摘要.png",
+      "sha256": "593d2af93e26e5a3ae4fad3cf7eeb55eda55ae1f2bcfa0fe4642283b31e14bf1",
+      "bytes": 33982,
+      "width": 1037,
+      "height": 187
+    },
+    {
+      "path": "docs/screenshots/core/03_三个独立合约部署与版本.png",
+      "sha256": "47cddcdf74d57a82b195876f250c5c75d981f4eff6a29ad525ae2e2145f08c02",
+      "bytes": 115316,
+      "width": 1080,
+      "height": 607
+    },
+    {
+      "path": "docs/screenshots/core/04_真实账户与任务合约发奖授权.png",
+      "sha256": "b5ada817d98cccbc6a07717c0907314d7bd348773617506c9e2b26134e13df21",
+      "bytes": 77053,
+      "width": 652,
+      "height": 497
+    },
+    {
+      "path": "docs/screenshots/core/05_校园成长护照登录页.png",
+      "sha256": "70bad283dda83f8406363a8a02da0759adb738c78c29c319a355aacad2807f80",
+      "bytes": 248332,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/core/06_管理员登录并刷新，展示三个任务及1006040奖励.png",
+      "sha256": "096842476d4fc9d9e8c3cbb7af506b4655e00cba39c828d6483b598728c28ddd",
+      "bytes": 647466,
+      "width": 1852,
+      "height": 2964
+    },
+    {
+      "path": "docs/screenshots/core/07_Alice三个任务均为待审核，展示材料摘要.png",
+      "sha256": "042a254bd31de7ae0c353554ab524540a688f04c504bcb7516fe9206fa81c839",
+      "bytes": 747431,
+      "width": 1852,
+      "height": 3561
+    },
+    {
+      "path": "docs/screenshots/core/08_保存终端中的E_PAUSED、state_unchanged=true与一致性检查结果.png",
+      "sha256": "fcb54d20b7481b9ad2b1835ec5ad6980d33cf2b479ab4f773ffac991345f4950",
+      "bytes": 108135,
+      "width": 1597,
+      "height": 587
+    },
+    {
+      "path": "docs/screenshots/core/09_首个任务审核成功的交易ID与回执+10_三个任务全部完成.png",
+      "sha256": "8d4ccd5b066f043ceb13f4200ecefe136062be5385239e2d2fe5203ce7931cbd",
+      "bytes": 813073,
+      "width": 1852,
+      "height": 4118
+    },
+    {
+      "path": "docs/screenshots/core/11_Alice成长护照、三类进度和三枚徽章.png",
+      "sha256": "d572f38c6bde93a370d15527903973b8f961c75addffbda70061c3a5619c7a8c",
+      "bytes": 795021,
+      "width": 1852,
+      "height": 3796
+    },
+    {
+      "path": "docs/screenshots/core/12_成长奖励成功回执与230积分.png",
+      "sha256": "749ce7a6ba1e767a80dc95ef647d978b735509b3c1612cf952fbcecf34c18588",
+      "bytes": 794939,
+      "width": 1852,
+      "height": 3796
+    },
+    {
+      "path": "docs/screenshots/core/13_转账成功回执.png",
+      "sha256": "b21f7365427972117e3063136aa1ed9c2de03e000018f7751962b94508fcb75d",
+      "bytes": 261223,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/core/14_Bob独立登录查询到账60，总发行量240.png",
+      "sha256": "0c3c8515a030a773257f7fa6c65f7a071b9ac8fba4f96f5e4d84807542288893",
+      "bytes": 268014,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/core/15a_重复审核与重复领取被拒绝.png",
+      "sha256": "d0977eb8e1b9659454b8ad2441ce9a9bf0835afa1c16fe1006d3daa6a02a0833",
+      "bytes": 72221,
+      "width": 867,
+      "height": 695
+    },
+    {
+      "path": "docs/screenshots/core/15b_普通用户越权操作被拒绝-4-6.png",
+      "sha256": "19eef61cf4916c6da45e488e0d95f1fc77ca27dfff790af8039ed64a7bd27b5b",
+      "bytes": 67044,
+      "width": 895,
+      "height": 695
+    },
+    {
+      "path": "docs/screenshots/core/15b_普通用户越权操作被拒绝-7+15c_成就徽章不可转让.png",
+      "sha256": "1ae4359a9131743aad17a0519fbcd24be6180c17e0f215e6753199070e2c4cf5",
+      "bytes": 48709,
+      "width": 836,
+      "height": 477
+    },
+    {
+      "path": "docs/screenshots/core/16a_伪造转出账户与余额不足.png",
+      "sha256": "192dbf0bbbfce7345b059fd97067e5e860bc7216aab978f1ee3a04db77496267",
+      "bytes": 45106,
+      "width": 802,
+      "height": 472
+    },
+    {
+      "path": "docs/screenshots/core/16b_零值与负数转账被拒绝.png",
+      "sha256": "894990ebdd6b0b5c792d71cba1dcb21e9ab63164cf726541984bf38aa0e0ce00",
+      "bytes": 46889,
+      "width": 772,
+      "height": 487
+    },
+    {
+      "path": "docs/screenshots/core/17_材料摘要匹配.png",
+      "sha256": "e30b1a1b10bb3b16d3b989f3218787c2fc1c628154d6fd1268c493826e2c24a6",
+      "bytes": 545079,
+      "width": 1852,
+      "height": 2144
+    },
+    {
+      "path": "docs/screenshots/core/18_材料摘要不匹配.png",
+      "sha256": "94c011d41e1fb543c17976c7c1705c743b9095e3cb3677340f56543e313085f6",
+      "bytes": 542194,
+      "width": 1852,
+      "height": 2144
+    },
+    {
+      "path": "docs/screenshots/core/19_保存最终余额、徽章数量、审核交易ID、区块高度和区块哈希.png",
+      "sha256": "9798d4a29831675275cdc6f97e2ee6966031fa0be5d3922605646b08afce9e64",
+      "bytes": 65609,
+      "width": 807,
+      "height": 520
+    },
+    {
+      "path": "docs/screenshots/shop/GUI01_学生首页_蓝白侧栏与四项概览.png",
+      "sha256": "4d479ec7259245a0e18a2295264108930e34f85c6fc5846edc843d9e90b29f79",
+      "bytes": 2068734,
+      "width": 1852,
+      "height": 3456
+    },
+    {
+      "path": "docs/screenshots/shop/GUI02_管理员首页_待审核与资产概览.png",
+      "sha256": "6ae1f1e97e56bf2f6a85676a673c6a1b1725b2e92c7735afcf0f839d2e855d47",
+      "bytes": 699654,
+      "width": 1852,
+      "height": 3606
+    },
+    {
+      "path": "docs/screenshots/shop/GUI04_积分商城_装扮预览与价格.png",
+      "sha256": "50daa74174249763b9742714ceb52169a9a551912cb6243c9f061272674cbadd",
+      "bytes": 624954,
+      "width": 1852,
+      "height": 1685
+    },
+    {
+      "path": "docs/screenshots/shop/GUI07_管理员兑换记录.png",
+      "sha256": "7263e5e448866bb3c366bb37b5bfba3604795f55be310889736f715fe228de9a",
+      "bytes": 448747,
+      "width": 1852,
+      "height": 1424
+    },
+    {
+      "path": "docs/screenshots/shop/GUI08_兑换余额与链上状态核验.png",
+      "sha256": "d6cc59861e3428f59a8550b170824afc3afd153bfb3a9a56a08f8e02fadae4f3",
+      "bytes": 145949,
+      "width": 1116,
+      "height": 767
+    },
+    {
+      "path": "docs/screenshots/shop/GUI09_权益权限与重复回查验证.png",
+      "sha256": "da659d071adf9f9489f40ba5ada561a105fa8cf22e910e1a092b20a73817e629",
+      "bytes": 111311,
+      "width": 815,
+      "height": 712
+    },
+    {
+      "path": "docs/screenshots/shop/GUI10_窄窗口响应式布局.png",
+      "sha256": "49c1d7083b0bf6cbc0a15e956340d79b08a7bb4f8ae9164335af7e9eaab4084e",
+      "bytes": 201302,
+      "width": 1055,
+      "height": 1012
+    },
+    {
+      "path": "docs/screenshots/v10/V10-01-登录页面.png",
+      "sha256": "56ad1365e36ed8dc7f2f0792c332c0a295d096aa942fe36d1097110c8b19e90e",
+      "bytes": 296361,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/v10/V10-02-学生首页.png",
+      "sha256": "e81fb7ed1ab6ba7f1a96d2cf7c7206c01f68b5af0ac044aa3bca9a7ae19f1642",
+      "bytes": 1249863,
+      "width": 1852,
+      "height": 2257
+    },
+    {
+      "path": "docs/screenshots/v10/V10-04-管理员首页.png",
+      "sha256": "75941b03a5e3c232d221122904fc876bd9d70885e657de66b6a73a346d474263",
+      "bytes": 692275,
+      "width": 1852,
+      "height": 2418
+    },
+    {
+      "path": "docs/screenshots/v10/V10-06-消息抽屉.png",
+      "sha256": "5ffd5780ccfe4f41cf805dc49382672b97264ecf592e0fc35c2ef6248bdbb063",
+      "bytes": 373771,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/v10/V10-07-业务菜单与编号折叠.png",
+      "sha256": "f6ec427fed76f984645b6034e6fdcd56655551789f65c63ce737b6f1edebeb56",
+      "bytes": 221273,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/v10/V10-08-侧栏折叠.png",
+      "sha256": "230141ad383f8d649c3bdb4f00ce8aaf5b2925130ca2ab37814a199b35026f3d",
+      "bytes": 511134,
+      "width": 1920,
+      "height": 1020
+    },
+    {
+      "path": "docs/screenshots/v10/V10_已拥有并使用装扮.png",
+      "sha256": "13222595de061aaf46e6c228f9bf8c1622dbbc333af59f602e0e1ea52f219b10",
+      "bytes": 1285131,
+      "width": 1852,
+      "height": 1988
+    },
+    {
+      "path": "docs/screenshots/v10/V10_恢复默认后商品仍然已拥有.png",
+      "sha256": "92e2cf7f99e91ecae65a19deb6f8fb35cc058f32a44dff5420db9fbf2b03784c",
+      "bytes": 744863,
+      "width": 1852,
+      "height": 2107
+    },
+    {
+      "path": "docs/screenshots/v10/V10_适配小窗.png",
+      "sha256": "152c23d34c068758ecb579e61eb15b9fea7aa06b26349a883101133c8d836318",
+      "bytes": 216500,
+      "width": 1055,
+      "height": 1012
+    }
+  ]
+}

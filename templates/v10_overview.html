@@ -1,0 +1,269 @@
+
+{% if user and not error %}
+{% set admin = user == 'admin' %}
+{% set approved = claims|selectattr('Status','equalto','APPROVED')|list %}
+{% set waiting = claims|selectattr('Status','equalto','SUBMITTED')|list %}
+{% set todo = claims|selectattr('Status','in',['CLAIMED','REJECTED'])|list %}
+
+<section id="v10-dashboard" hidden>
+  <section class="hero">
+    <div class="eyebrow">
+      CAMPUS PASSPORT /
+      {{'CAMPUS OPERATIONS' if admin else 'YOUR GROWTH JOURNEY'}}
+    </div>
+    <h1>
+      {{'让每一份校园贡献，都被认真看见。' if admin
+        else '把热爱变成行动，把贡献写进成长。'}}
+    </h1>
+    <p>
+      {{labels[user]}}，欢迎回来。
+      {{'从待审核凭证开始，连接任务、奖励与校园荣誉。' if admin
+        else '参与校园任务，收集成长印章，留下属于你的校园足迹。'}}
+    </p>
+  </section>
+
+  <div class="grid stats">
+    {% set metrics = [
+      ('已发布任务',state.task.Tasks|length),
+      ('待审核凭证',waiting|length),
+      ('积分发行总量',state.ft.Supply),
+      ('已颁发徽章',state.nft.Badges|length)
+    ] if admin else [
+      ('可用贡献积分',balance),
+      ('已完成任务',approved|length),
+      ('进行中 · 含待审核',claims|length-approved|length),
+      ('持有成就徽章',badges|length)
+    ] %}
+    {% for title,value in metrics %}
+    <article class="card">
+      <small>{{title}}</small><div class="metric">{{value}}</div>
+    </article>
+    {% endfor %}
+  </div>
+
+  <div class="v10-grid">
+    {% if admin %}
+
+    <article class="card">
+      <div class="v10-kicker">REVIEW QUEUE</div>
+      <h2>待审核凭证</h2>
+      {% for c in waiting[:4] %}
+      <div class="v10-item">
+        <strong>{{state.task.Tasks[c.TaskID].Title}}</strong>
+        <p class="muted">{{c.Owner|person}} · 等待审核</p>
+      </div>
+      {% else %}
+      <p class="muted">目前没有待审核凭证。</p>
+      {% endfor %}
+      <a href="/#review">进入凭证审核 →</a>
+    </article>
+
+    <article class="card">
+      <div class="v10-kicker">QUICK ACTIONS</div>
+      <h2>常用管理入口</h2>
+      <div class="v10-chips">
+        <a href="/#tasks">发布与管理任务</a>
+        <a href="/#review">审核凭证</a>
+        <a href="/#points">积分发行</a>
+        <a href="/#badges">颁发徽章</a>
+        <a href="/shop">查看兑换记录</a>
+      </div>
+      <p class="muted">进入对应页面后操作，首页仅作概览。</p>
+    </article>
+
+    <article class="card">
+      <h2>校园任务概况</h2>
+      <small>按任务编号排列；原始状态未提供发布时间。</small>
+      {% for id,t in (state.task.Tasks|dictsort)[:4] %}
+      <div class="v10-item">
+        <strong>{{t.Title}}</strong>
+        <p>{{categories.get(t.Category,t.Category)}} · 奖励 {{t.Reward}} 积分</p>
+        <small>
+          已完成 {{approved|selectattr('TaskID','equalto',id)|list|length}} 人次
+        </small>
+      </div>
+      {% else %}
+      <p class="muted">暂无已发布任务。</p>
+      {% endfor %}
+    </article>
+
+    <article class="card">
+      <h2>已通过任务的奖励记录</h2>
+      <small>关联审核结果；不是平台完整收支流水，未按时间排序。</small>
+      {% for c in approved[:4] %}
+      <div class="v10-item">
+        <strong>{{state.task.Tasks[c.TaskID].Title}}</strong>
+        <p>
+          {{c.Owner|person}} ·
+          任务配置奖励 {{state.task.Tasks[c.TaskID].Reward}} 积分
+        </p>
+        <details>
+          <summary>查看关联审核交易</summary>
+          <span class="mono">{{c.ReviewTx or '未提供交易编号'}}</span>
+        </details>
+      </div>
+      {% else %}
+      <p class="muted">暂无审核通过的任务记录。</p>
+      {% endfor %}
+    </article>
+
+    <article class="card v10-wide">
+      <h2>任务参与与完成情况</h2>
+      <small>来自当前任务状态：领取记录数量与审核通过数量。</small>
+      {% for id,t in state.task.Tasks|dictsort %}
+      {% set total=claims|selectattr('TaskID','equalto',id)|list|length %}
+      {% set done=approved|selectattr('TaskID','equalto',id)|list|length %}
+      <div class="v10-item">
+        <div class="row" style="justify-content:space-between">
+          <strong>{{t.Title}}</strong>
+          <span>完成 {{done}} / 参与 {{total}}</span>
+        </div>
+        <div class="progress" role="img"
+             aria-label="{{t.Title}}：完成{{done}}人次，参与{{total}}人次">
+          <span style="width:{{done*100/total if total else 0}}%"></span>
+        </div>
+      </div>
+      {% else %}
+      <p class="muted">发布任务后可查看参与统计。</p>
+      {% endfor %}
+    </article>
+
+    {% else %}
+
+    <article class="card">
+      <div class="v10-kicker">EXPLORE CAMPUS</div>
+      <h2>从一件小事开始</h2>
+      <small>优先展示尚未领取的任务，按任务编号排列。</small>
+      {% set owned=claims|map(attribute='TaskID')|list %}
+      {% set ns=namespace(count=0) %}
+      {% for id,t in state.task.Tasks|dictsort %}
+      {% if id not in owned and ns.count<3 %}
+      {% set ns.count=ns.count+1 %}
+      <div class="v10-item">
+        <span class="tag">{{categories.get(t.Category,t.Category)}}</span>
+        <p><strong>{{t.Title}}</strong></p>
+        <span class="reward">+{{t.Reward}}</span>
+        <small>贡献积分</small>
+      </div>
+      {% endif %}
+      {% endfor %}
+      {% if not ns.count %}
+      <p class="muted">暂无尚未领取的任务，可以查看已有任务进度。</p>
+      {% endif %}
+      <a href="/#tasks">前往校园任务 →</a>
+    </article>
+
+    <article class="card" id="v10-todo">
+      <div class="v10-kicker">NEXT STEP</div>
+      <h2>我的待办</h2>
+      {% for c in todo[:4] %}
+      <div class="v10-item">
+        <strong>{{state.task.Tasks[c.TaskID].Title}}</strong>
+        <p class="muted">
+          {{'补充材料后重新提交' if c.Status=='REJECTED'
+            else '完成任务后提交凭证'}}
+        </p>
+      </div>
+      {% else %}
+      <p class="muted">没有待提交的任务凭证。</p>
+      {% endfor %}
+      {% if completed|length==3
+            and not state.task.Done.get('milestone:' ~ accounts[user]) %}
+      <p class="tag">三类贡献已集齐，可前往领取成长奖励。</p>
+      <a href="/#passport">查看成长奖励 →</a>
+      {% endif %}
+      <p><a href="/#tasks">处理任务待办 →</a></p>
+    </article>
+
+    <article class="card">
+      <h2>我的成长护照</h2>
+      <p>已点亮 <strong>{{completed|length}} / 3</strong> 类校园贡献印章</p>
+      <div class="progress">
+        <span style="width:{{completed|length*100/3}}%"></span>
+      </div>
+      <div class="row">
+        {% for k,v in categories.items() %}
+        <span class="tag {{'' if k in completed else 'blue'}}">
+          {{'✓' if k in completed else '○'}} {{v}}
+        </span>
+        {% endfor %}
+      </div>
+      <p class="muted">成长印章是任务完成情况的展示，不等同于 NFT。</p>
+      <a href="/#passport">打开成长护照 →</a>
+    </article>
+
+    <article class="card">
+      <h2>已发生的任务动态</h2>
+      <small>按任务编号展示状态摘要；原记录不含事件时间。</small>
+      {% set events=claims|selectattr('Status','in',['APPROVED','REJECTED'])|list %}
+      {% for c in events[:4] %}
+      <div class="v10-item">
+        <strong>{{state.task.Tasks[c.TaskID].Title}}</strong>
+        <p>{{statuses[c.Status]}}</p>
+        {% if c.BadgeID %}
+        <a href="/verify?id={{c.BadgeID|urlencode}}">查看关联成就凭证 →</a>
+        {% endif %}
+      </div>
+      {% else %}
+      <p class="muted">尚无任务审核结果。</p>
+      {% endfor %}
+    </article>
+
+    <article class="card v10-wide">
+      <h2>代表性成就</h2>
+      <small>
+        展示实际持有的徽章；默认按编号排列，可在本浏览器固定一枚。
+      </small>
+      <div class="grid" id="v10-badges" style="margin-top:16px">
+        {% for b in badges %}
+        <div class="v10-item" data-badge="{{b.ID}}"
+             {% if loop.index>3 %}hidden{% endif %}>
+          <div class="badge-icon">✦</div>
+          <strong>{{b.Title}}</strong>
+          <p><a href="/verify?id={{b.ID|urlencode}}">查看链上凭证 →</a></p>
+        </div>
+        {% else %}
+        <p class="muted">
+          尚未获得徽章，完成任务并通过审核后可在这里查看。
+        </p>
+        {% endfor %}
+      </div>
+      {% if badges %}
+      <details>
+        <summary>设置代表徽章（本浏览器显示偏好）</summary>
+        <label for="v10-featured">从我持有的徽章中选择</label>
+        <select id="v10-featured">
+          <option value="">默认排列</option>
+          {% for b in badges %}
+          <option value="{{b.ID}}">{{b.Title}}</option>
+          {% endfor %}
+        </select>
+      </details>
+      {% endif %}
+    </article>
+
+    {% endif %}
+
+    <article class="card v10-wide">
+      <h2>{{'链上服务与账户摘要' if admin else '我的链上账户'}}</h2>
+      <span class="tag">本次链上快照读取成功</span>
+      <p class="muted">
+        状态来自本次页面请求，不代表持续监测或全部节点健康。
+      </p>
+      <details>
+        <summary>查看完整账户地址</summary>
+        <code id="v10-account">{{accounts[user]}}</code>
+        <p>
+          <button type="button" id="v10-copy" class="secondary">
+            复制账户地址
+          </button>
+          <span id="v10-copy-result" role="status"></span>
+        </p>
+      </details>
+      <a href="/">重新读取首页数据 →</a>
+    </article>
+  </div>
+</section>
+
+<h1 id="v10-business-title" class="v10-page-title" hidden></h1>
+{% endif %}

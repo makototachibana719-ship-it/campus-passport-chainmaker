@@ -1,0 +1,211 @@
+{% extends "base.html" %}
+{% macro hidden(action) %}
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="action" value="{{action}}">
+{% endmacro %}
+{% block content %}
+{% include "v10_overview.html" %}
+<div id="v10-legacy">
+<section class="hero">
+<div class="eyebrow">LEARN · CONTRIBUTE · GROW</div>
+<h1>让校园贡献，成为你的成长凭证。</h1>
+<p>领取校园任务，提交完成材料，经过审核获得贡献积分与专属成就徽章。</p>
+</section>
+
+{% if error %}
+<div class="card notice badbox"><strong class="bad">{{'本次链上数据读取未完成，请稍后刷新；详情请在服务器端核查。' if user else '登录未完成，请核对账户和密码。'}}</strong></div>
+{% endif %}
+
+{% if not user %}
+<div class="card login">
+<h2>欢迎回来</h2><p class="muted">使用原积分应用的账户密码登录。</p>
+<form action="/login" method="post">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<label>账户</label><select name="user">
+{% for u in users %}<option value="{{u}}">{{labels[u]}}</option>{% endfor %}
+</select>
+<label>密码</label><input name="password" type="password" required autocomplete="current-password">
+<button style="width:100%">进入成长护照</button>
+</form></div>
+{% elif not error %}
+
+<div class="row" style="justify-content:space-between;margin-bottom:20px">
+<div><strong>{{labels[user]}}</strong><br>
+<details><summary>查看我的链上账户</summary><span class="mono muted">{{accounts[user]}}</span></details></div>
+<span class="tag">本次链上数据读取成功</span>
+</div>
+
+
+<div class="grid stats">
+{% if user=='admin' %}
+<div class="card"><small>已发布任务</small><div class="metric">{{state.task.Tasks|length}}</div></div>
+<div class="card"><small>待审核记录</small><div class="metric">{{pending}}</div></div>
+<div class="card"><small>积分发行总量</small><div class="metric">{{state.ft.Supply}}</div></div>
+<div class="card"><small>已颁发徽章</small><div class="metric">{{state.nft.Badges|length}}</div></div>
+{% else %}
+{% set finished=claims|selectattr('Status','equalto','APPROVED')|list %}
+<div class="card"><small>当前可用积分</small><div class="metric">{{balance}}</div></div>
+<div class="card"><small>已完成任务</small><div class="metric">{{finished|length}}</div></div>
+<div class="card"><small>进行中任务 · 含待审核</small><div class="metric">{{claims|length-finished|length}}</div></div>
+<div class="card"><small>我的成就徽章</small><div class="metric">{{badges|length}}</div></div>
+{% endif %}
+</div>
+{% if last %}
+<section class="card notice {{'badbox' if not last.ok else ''}}">
+<strong class="{{'ok' if last.ok else 'bad'}}">
+{{'操作已确认' if last.ok else '操作未成功，请查看原因'}}</strong>
+{% if not last.ok %}<p class="bad">{{last.error}}</p>{% endif %}
+<p class="muted">{{'操作结果已返回，可在下方查看凭证。' if last.ok else '请先核对原因，再决定是否重试。'}}</p>
+<details><summary>查看交易凭证</summary>
+<p class="mono">交易ID：{{last.get('tx_id','未取得')}}<br>
+区块高度：{{last.get('height','未返回')}}</p></details>
+<details><summary>查看本次回执</summary><pre>{{last|tojson(indent=2)}}</pre></details>
+</section>
+{% endif %}
+
+<nav class="nav">
+<a href="#tasks">任务大厅</a><a href="#claims">{{'审核工作台' if user=='admin' else '我的任务'}}</a>
+<a href="#growth">成长护照</a><a href="#points">积分流转</a><a href="/shop">积分商城</a>
+</nav>
+
+{% if user=='admin' %}
+<section class="card">
+<h2>发布校园任务</h2>
+<form action="/act" method="post">
+{{hidden('create')}}
+<div class="two">
+<div><label>任务编号</label><input name="id" placeholder="例如 CAMPUS_004" required maxlength="40"></div>
+<div><label>任务名称</label><input name="title" placeholder="例如：开源工具分享会" required maxlength="80"></div>
+</div>
+<div class="two">
+<div><label>任务类别</label><select name="category">
+{% for k,v in categories.items() %}<option value="{{k}}">{{v}}</option>{% endfor %}
+</select></div>
+<div><label>奖励积分</label><input name="reward" type="number" min="1" max="10000" required></div>
+</div><button>发布任务</button>
+</form></section>
+{% endif %}
+
+<h2 id="tasks">任务大厅</h2>
+<div class="grid">
+{% for id,t in state.task.Tasks|dictsort %}
+<section class="card">
+<span class="tag">{{categories.get(t.Category,t.Category)}}</span>
+<h3 style="margin-top:14px">{{t.Title}}</h3>
+<div class="reward">+{{t.Reward}} <small>POINT</small></div>
+<p class="muted">完成并通过审核，获得同名成就徽章。</p>
+<details><summary>任务编号</summary><p class="mono">{{t.ID}}</p></details>
+{% if user!='admin' %}
+<form action="/act" method="post">{{hidden('claim')}}
+<input type="hidden" name="task" value="{{t.ID}}">
+<button>领取任务</button>
+</form>
+{% endif %}
+</section>
+{% else %}<p class="muted">暂无任务，等待管理员发布。</p>{% endfor %}
+</div>
+
+<section class="card" id="claims">
+<h2>{{'审核工作台' if user=='admin' else '我的任务'}}</h2>
+{% for c in claims %}
+<div style="border-top:1px solid #e3e8ef;padding:20px 0">
+<div class="row" style="justify-content:space-between">
+<strong>{{state.task.Tasks[c.TaskID].Title}}</strong>
+<span class="tag {{'blue' if c.Status=='SUBMITTED' else ''}}">{{statuses[c.Status]}}</span>
+</div>
+<p class="muted">参与同学：{{c.Owner|person}}</p><details><summary>查看链上领取记录</summary><p class="mono">账户地址：{{c.Owner}}<br>记录编号：{{c.ID}}</p></details>
+{% if c.Proof %}<details><summary>材料摘要与审核记录</summary>
+<p class="mono">SHA-256：{{c.Proof}}<br>审核交易：{{c.ReviewTx}}</p>
+<p>{{c.Reason}}</p></details>{% endif %}
+
+{% if user!='admin' and c.Status in ['CLAIMED','REJECTED'] %}
+<form action="/act" method="post" enctype="multipart/form-data">
+{{hidden('submit')}}<input type="hidden" name="claim" value="{{c.ID}}">
+<label>完成材料文本，或选择文件；两者都有时以文件为准</label>
+<textarea name="evidence" placeholder="填写本次实验的模拟完成材料"></textarea>
+<input type="file" name="material">
+<small>只将材料摘要写入链上；请自行保留原文或原文件。</small><br>
+<button>提交审核</button>
+</form>
+{% endif %}
+
+{% if user=='admin' and c.Status=='SUBMITTED' %}
+<form action="/act" method="post">
+{{hidden('review')}}<input type="hidden" name="claim" value="{{c.ID}}">
+<label>审核意见；退回时必填</label>
+<input name="reason" maxlength="80" placeholder="例如：完成材料已核对">
+<button name="approve" value="true">通过并发放奖励</button>
+<button class="danger" name="approve" value="false">退回补充</button>
+</form>
+{% endif %}
+{% if c.BadgeID %}<a href="/verify?id={{c.BadgeID}}">查看该任务的成就凭证 →</a>{% endif %}
+</div>
+{% else %}<p class="muted">暂无领取记录。</p>{% endfor %}
+</section>
+
+<section class="card" id="growth">
+<h2>我的成长护照</h2>
+<p class="muted">完成三类校园贡献，领取一次额外的30积分成长奖励。</p>
+<div class="progress"><span style="width:{{completed|length*100/3}}%"></span></div>
+<div class="row">
+{% for k,v in categories.items() %}
+<span class="tag {{'' if k in completed else 'blue'}}">{{'✓ ' if k in completed else '○ '}}{{v}}</span>
+{% endfor %}
+</div>
+{% if user!='admin' %}
+<form action="/act" method="post" style="margin-top:18px">{{hidden('milestone')}}
+<button>领取成长奖励 +30</button>
+</form>
+{% endif %}
+</section>
+
+<div class="grid">
+{% for b in badges %}
+<section class="card">
+<div class="badge-icon">✦</div>
+<span class="tag gold">身份绑定 · 唯一凭证</span>
+<h3 style="margin-top:14px">{{b.Title}}</h3>
+<details><summary>链上徽章编号</summary><p class="mono">{{b.ID}}</p></details>
+<a href="/verify?id={{b.ID}}">查看与分享查验页面 →</a>
+</section>
+{% else %}<p class="muted">完成任务并通过审核后，这里会展示你的成就徽章。</p>{% endfor %}
+</div>
+
+<section class="card" id="points">
+<h2>积分流转</h2>
+<form action="/act" method="post">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="rid" value="{{rid}}">
+<div class="two">
+<div><label>操作</label><select name="action">
+<option value="transfer">转出我的积分</option>
+{% if user=='admin' %}<option value="mint">管理员发行积分</option>{% endif %}
+</select></div>
+<div><label>接收账户</label><select name="target">
+{% for u in users %}<option value="{{u}}" {{'selected' if u=='bob' else ''}}>{{labels[u]}}</option>{% endfor %}
+</select></div>
+</div>
+<label>数量</label><input name="amount" type="number" min="1" required>
+<button>确认执行一次</button>
+</form>
+</section>
+
+{% if user=='admin' %}
+<section class="card"><details><summary>颁发独立活动徽章</summary>
+<p class="muted">独立徽章不计入“三类任务完成”的成长奖励条件。</p>
+<form action="/act" method="post" enctype="multipart/form-data">
+{{hidden('badge')}}
+<label>唯一徽章编号</label><input name="id" required maxlength="100">
+<label>徽章名称</label><input name="title" required maxlength="80">
+<label>颁发对象</label><select name="target">
+<option value="alice">Alice · 学生A</option><option value="bob">Bob · 学生B</option>
+</select>
+<label>颁发依据文本或文件</label><textarea name="evidence"></textarea>
+<input type="file" name="material">
+<button>铸造并颁发徽章</button>
+</form></details></section>
+{% endif %}
+
+{% endif %}
+</div>
+{% endblock %}

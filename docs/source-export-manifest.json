@@ -1,0 +1,82 @@
+{
+  "purpose": "最新版源码传输包，非最终提交压缩包",
+  "python_version": "3.14.6",
+  "file_count": 13,
+  "files": [
+    {
+      "path": "acceptance.py",
+      "bytes": 8385,
+      "sha256": "c72604a3bae34c233c986a6250f402ee8d6ab1a549488c2883e937b9e06709aa"
+    },
+    {
+      "path": "app.py",
+      "bytes": 6391,
+      "sha256": "91680a6f55b16aa1386efd1b6ec7e692ae0374191e0b140ee583817856941d34"
+    },
+    {
+      "path": "bridge.py",
+      "bytes": 9414,
+      "sha256": "23654d468732d09647e224c1eeb4b317858d2626f4abaa75c10dcc0478d687f7"
+    },
+    {
+      "path": "contract/go.mod",
+      "bytes": 1331,
+      "sha256": "dcd8e904da968a5ad9a165376502b31f4a6a2cbbb853749212b6887ca28c65b5"
+    },
+    {
+      "path": "contract/go.sum",
+      "bytes": 117712,
+      "sha256": "79a537d2479d2efd43bda45ca60efd0d321a75c828c14c7650f517b61901ceb0"
+    },
+    {
+      "path": "contract/main.go",
+      "bytes": 12621,
+      "sha256": "289232b29efbe85c908fda9d28674a4fae8f86c649269cf4867e5a4581f3ee75"
+    },
+    {
+      "path": "requirements-lock.txt",
+      "bytes": 3180,
+      "sha256": "293a19825806e58a8b5e96fb262d036e33e2072937a8286f0c43a39c9903f138"
+    },
+    {
+      "path": "shop.py",
+      "bytes": 10809,
+      "sha256": "eb302c2868ec03a5780d585f4f7edc4ab0d9e7a0e8773ec604b669dd5e09bcca"
+    },
+    {
+      "path": "templates/base.html",
+      "bytes": 17991,
+      "sha256": "b2902d58a2c2bfde19eb19424f6d32cd30baed3214dc4d9846a0059a72e91443"
+    },
+    {
+      "path": "templates/index.html",
+      "bytes": 9572,
+      "sha256": "28ce7801a18ca99e7809a679c73bc3b48e8da7e06070ca8d6a077bdaff33b5c3"
+    },
+    {
+      "path": "templates/shop.html",
+      "bytes": 4001,
+      "sha256": "d99e2f0b5a5cf0b00947125fe1e93db89a97e86aea9b9bc3f7279c2c577feaec"
+    },
+    {
+      "path": "templates/v10_overview.html",
+      "bytes": 9842,
+      "sha256": "1ab79fb52353ce3deca4b22bb58010f9706ce5338ed96fe1c5348fa20c3c5466"
+    },
+    {
+      "path": "templates/verify.html",
+      "bytes": 2216,
+      "sha256": "f988c1390b330849beebc202ab01e491b98438dc59b72c093fc476cb7306b07c"
+    }
+  ],
+  "excluded": [
+    "settings.json",
+    "users.json",
+    "实际SDK配置",
+    "证书与私钥",
+    "数据库",
+    "业务日志",
+    "历史备份",
+    "构建产物"
+  ]
+}

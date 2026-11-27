@@ -1,0 +1,60 @@
+{
+  "python_syntax": {
+    "status": "PASS",
+    "files": [
+      "acceptance.py",
+      "app.py",
+      "bridge.py",
+      "shop.py",
+      "tools/check_package.py",
+      "tools/create_users.py"
+    ]
+  },
+  "source_byte_integrity": {
+    "status": "PASS",
+    "count": 13
+  },
+  "screenshot_byte_integrity": {
+    "status": "PASS",
+    "count": 38
+  },
+  "jinja_compilation": {
+    "status": "PASS",
+    "templates": [
+      "base.html",
+      "index.html",
+      "shop.html",
+      "v10_overview.html",
+      "verify.html"
+    ]
+  },
+  "template_cases": {
+    "status": "MOCK ONLY",
+    "passed": 17,
+    "cases": [
+      "index-None",
+      "index-admin",
+      "index-alice",
+      "index-bob",
+      "empty-alice",
+      "receipt-alice",
+      "empty-admin",
+      "receipt-admin",
+      "error-None",
+      "error-alice",
+      "shop-alice-paid",
+      "shop-alice-pending",
+      "shop-alice-failed",
+      "shop-admin-paid",
+      "verify-None",
+      "verify-alice",
+      "verify-admin"
+    ]
+  },
+  "javascript_syntax": "PASS",
+  "live_chain_tests": "NOT RUN",
+  "go_build": "NOT RUN",
+  "fresh_dependency_install": "NOT RUN",
+  "checked_date": "2026-11-27",
+  "scope": "Offline static and MOCK ONLY template checks; no original chain operations"
+}

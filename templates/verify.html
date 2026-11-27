@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="hero"><div class="eyebrow">VERIFIABLE ACHIEVEMENT</div>
+<h1>一枚徽章，一段可查验的贡献。</h1>
+<p>查询链上持有人与发放记录，并核对完成材料是否与存证摘要一致。</p>
+</section>
+<section class="card">
+<form method="get">
+<label>徽章编号</label><input name="id" value="{{token_id}}" required>
+<button>查询链上凭证</button>
+</form>
+</section>
+{% if error %}<section class="card bad">{{error}}</section>{% endif %}
+{% if badge %}
+<section class="card">
+<div class="badge-icon">✦</div><span class="tag">链上存在 · 不可转让</span>
+<h2 style="margin-top:18px">{{badge.Title}}</h2>
+<p>持有人：<strong>{{badge.Owner|person}}</strong></p><p class="muted">此凭证与持有人绑定，不可转让。</p><details><summary>查看完整链上凭证</summary><div class="tablewrap"><table>
+<tr><th>徽章编号</th><td class="mono">{{badge.ID}}</td></tr>
+<tr><th>持有人</th><td class="mono">{{badge.Owner}}</td></tr>
+<tr><th>贡献类别</th><td>{{categories.get(badge.Category,'独立活动')}}</td></tr>
+<tr><th>完成材料摘要</th><td class="mono">{{badge.Proof}}</td></tr>
+<tr><th>关联领取记录</th><td class="mono">{{badge.ClaimID or '独立颁发'}}</td></tr>
+<tr><th>发放交易</th><td class="mono">{{badge.Tx}}</td></tr>
+</table></div></details>
+</section>
+<section class="card">
+<h2>核验完成材料</h2>
+<p class="muted">输入原始文本或选择原文件。文件优先，按原始字节计算SHA-256。</p>
+<form method="post" enctype="multipart/form-data">
+<input type="hidden" name="csrf" value="{{csrf}}">
+<input type="hidden" name="id" value="{{badge.ID}}">
+<textarea name="evidence" placeholder="输入当时提交的原始文本"></textarea>
+<input type="file" name="material">
+<button>比对链上摘要</button>
+</form>
+{% if match is not none %}
+<h3 class="{{'ok' if match else 'bad'}}">
+{{'核验匹配：材料摘要与链上记录一致' if match else '核验不匹配：材料与链上存证不一致'}}
+</h3>
+{% endif %}
+<p class="muted">摘要匹配不等于材料内容真实；内容真实性由颁发方审核。</p>
+</section>
+{% endif %}
+{% endblock %}

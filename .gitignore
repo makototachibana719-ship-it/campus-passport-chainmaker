@@ -1,0 +1,35 @@
+# Local identities, authentication, and chain configuration
+settings.json
+users.json
+config/
+crypto-config/
+certs/
+certificates/
+*.key
+*.pem
+*.crt
+*.p12
+*.pfx
+.env
+.env.*
+!.env.example
+
+# Runtime data and logs
+*.sqlite*
+*.db
+*.db-*
+*.log
+results/
+logs/
+uploads/
+
+# Environments, caches, and local builds
+.venv/
+venv/
+node_modules/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+contract/build/
+.DS_Store
+Thumbs.db
